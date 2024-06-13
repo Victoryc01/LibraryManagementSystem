@@ -4,6 +4,7 @@ import libraryMGMTT.entity.Book;
 import libraryMGMTT.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
+@Validated
 public class BookController {
 
     private final BookService bookService;
@@ -38,13 +40,13 @@ public class BookController {
     }
 
     @DeleteMapping("/deleteBook/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id){
+    public ResponseEntity<String> deleteBook(@PathVariable Long id){
         bookService.deleteBook(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body("Book with is "+id+" deleted");
     }
 
-    @DeleteMapping("/deleteBook/{id}")
-    public void deleteBooks(@PathVariable Long id){
-        bookService.deleteBook(id);
-    }
+//    @DeleteMapping("/deleteBook/{id}")
+//    public void deleteBooks(@PathVariable Long id){
+//        bookService.deleteBook(id);
+//    }
 }

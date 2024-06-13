@@ -34,11 +34,14 @@ public class PatronServiceImpl implements PatronService {
 
     @Override
     public Optional<Patron> updatePatron(Long id, Patron patronDetails) {
-        return patronRepo.findById(id).map(patron -> {
-            patron.setName(patronDetails.getName());
-            patron.setContactInfo(patronDetails.getContactInfo());
-            return patronRepo.save(patron);
-        });
+        if (patronRepo.existsById(id)) {
+            return patronRepo.findById(id).map(patron -> {
+                patron.setName(patronDetails.getName());
+                patron.setContactInfo(patronDetails.getContactInfo());
+                return patronRepo.save(patron);
+            });
+        }
+        throw new RuntimeException("No patron found with id " + id);
     }
 
     @Override

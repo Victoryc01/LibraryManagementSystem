@@ -4,6 +4,7 @@ import libraryMGMTT.entity.Book;
 import libraryMGMTT.repository.BookRepo;
 import libraryMGMTT.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,18 +34,21 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> updateBooks(Long id, Book bookDetails) {
-        return bookRepo.findById(id).map(book -> {
-            book.setTitle(bookDetails.getTitle());
-            book.setAuthor(bookDetails.getAuthor());
-            book.setPublicationYear(bookDetails.getPublicationYear());
-            book.setIsbn(bookDetails.getIsbn());
-            return bookRepo.save(book);
-        });
+        if (bookRepo.existsById(id)) {
+            return bookRepo.findById(id).map(book -> {
+                book.setTitle(bookDetails.getTitle());
+                book.setAuthor(bookDetails.getAuthor());
+                book.setPublicationYear(bookDetails.getPublicationYear());
+                book.setIsbn(bookDetails.getIsbn());
+                return bookRepo.save(book);
+            });
+        }
+          throw new RuntimeException("No book found with id "+id);
     }
 
     @Override
     public void deleteBook(Long id) {
         Book deleteBook = getBookById(id);
-        bookRepo.delete(deleteBook);
+            bookRepo.delete(deleteBook);
     }
 }

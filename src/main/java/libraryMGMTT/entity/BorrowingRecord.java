@@ -26,5 +26,4 @@ public class BorrowingRecord {
     @ManyToOne
     private Patron patron;
 
-    //● Borrowing Record: Tracks the association between books and patrons including borrowing and return dates.
 }

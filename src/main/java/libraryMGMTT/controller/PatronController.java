@@ -4,13 +4,15 @@ import libraryMGMTT.entity.Patron;
 import libraryMGMTT.service.PatronService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/patron")
+@RequestMapping("/api/patrons")
 @RequiredArgsConstructor
+@Validated
 public class PatronController {
 
     private final PatronService patronService;
@@ -41,4 +43,5 @@ public class PatronController {
     public void deletePatron(@PathVariable Long id){
          patronService.deletePatron(id);
     }
+
 }
