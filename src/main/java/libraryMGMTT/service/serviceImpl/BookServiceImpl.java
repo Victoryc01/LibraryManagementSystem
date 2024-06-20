@@ -34,7 +34,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> updateBooks(Long id, Book bookDetails) {
-        if (bookRepo.existsById(id)) {
             return bookRepo.findById(id).map(book -> {
                 book.setTitle(bookDetails.getTitle());
                 book.setAuthor(bookDetails.getAuthor());
@@ -42,13 +41,12 @@ public class BookServiceImpl implements BookService {
                 book.setIsbn(bookDetails.getIsbn());
                 return bookRepo.save(book);
             });
-        }
-          throw new RuntimeException("No book found with id "+id);
     }
 
     @Override
     public void deleteBook(Long id) {
-        Book deleteBook = getBookById(id);
-            bookRepo.delete(deleteBook);
+        Book book =bookRepo.findById(id)
+                .orElseThrow(()-> new RuntimeException("No book found with id "+id));
+        bookRepo.delete(book);
     }
 }

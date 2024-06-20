@@ -40,7 +40,7 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
 
             return Optional.of(borrowingRecordRepo.save(record));
         }
-            throw new IllegalArgumentException("Book or Patron not found");
+            throw new RuntimeException("Book or Patron not found");
     }
 
     @Override
@@ -53,6 +53,6 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
             record.setReturnDate(LocalDate.now());
             return Optional.of(borrowingRecordRepo.save(record));
         }
-            throw new IllegalArgumentException("Book or Patron not found");
+            throw new RuntimeException("Borrowing record not found");
     }
 }

@@ -1,5 +1,6 @@
 package libraryMGMTT.service.serviceImpl;
 
+import libraryMGMTT.entity.Book;
 import libraryMGMTT.entity.Patron;
 import libraryMGMTT.repository.PatronRepo;
 import libraryMGMTT.service.PatronService;
@@ -34,19 +35,17 @@ public class PatronServiceImpl implements PatronService {
 
     @Override
     public Optional<Patron> updatePatron(Long id, Patron patronDetails) {
-        if (patronRepo.existsById(id)) {
             return patronRepo.findById(id).map(patron -> {
                 patron.setName(patronDetails.getName());
                 patron.setContactInfo(patronDetails.getContactInfo());
                 return patronRepo.save(patron);
             });
-        }
-        throw new RuntimeException("No patron found with id " + id);
     }
 
     @Override
     public void deletePatron(Long id) {
-        Patron deletePatron = getPatronById(id);
+        Patron deletePatron = patronRepo.findById(id)
+                .orElseThrow(()-> new RuntimeException("No book found with id "+id));
         patronRepo.delete(deletePatron);
     }
 }

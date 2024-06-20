@@ -3,9 +3,11 @@ package libraryMGMTT.controller;
 import libraryMGMTT.entity.Patron;
 import libraryMGMTT.service.PatronService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,25 +25,35 @@ public class PatronController {
     }
 
     @GetMapping("/{id}")
-    public Patron getPatronById(@PathVariable Long id){
-        return patronService.getPatronById(id);
+    public ResponseEntity<Patron> getPatronById(@PathVariable Long id){
+        Patron patron = patronService.getPatronById(id);
+        if (patron != null){
+            return new ResponseEntity<>(patron, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/add")
-    public Patron addPatron(@RequestBody Patron patron){
-        return patronService.addPatron(patron);
+    public ResponseEntity<Patron> addPatron(@RequestBody Patron patron){
+        Patron addPatron = patronService.addPatron(patron);
+        return new ResponseEntity<>(addPatron, HttpStatus.CREATED);
     }
 
     @PutMapping("/updatePatron/{id}")
     public ResponseEntity<Patron> updatePatron(@PathVariable Long id, @RequestBody Patron patron){
         return patronService.updatePatron(id, patron)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Patron not found"));
     }
 
     @DeleteMapping("/deletePatron/{id}")
-    public void deletePatron(@PathVariable Long id){
-         patronService.deletePatron(id);
+    public ResponseEntity<String> deletePatron(@PathVariable Long id){
+        try {
+            patronService.deletePatron(id);
+            return ResponseEntity.ok().body("Patron with id "+id+" deleted");
+        }catch (RuntimeException e){
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
 }
