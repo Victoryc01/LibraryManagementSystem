@@ -2,6 +2,7 @@ package libraryMGMTT.service;
 
 import libraryMGMTT.entity.Patron;
 import libraryMGMTT.repository.PatronRepo;
+import libraryMGMTT.service.serviceImpl.PatronServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.never;
 public class PatronServiceTest {
 
     @InjectMocks
-    private PatronService patronService;
+    private PatronServiceImpl patronService;
     @Mock
     private PatronRepo patronRepo;
 
