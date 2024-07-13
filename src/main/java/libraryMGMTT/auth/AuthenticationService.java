@@ -28,8 +28,9 @@ public class AuthenticationService {
                         .build();
         adminRepo.save(user);
 
-      return   AuthenticationResponse.builder().token("Account created! Login to get token").build();
-
+      return   AuthenticationResponse.builder()
+              .token("Account created! Login to get token")
+              .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
